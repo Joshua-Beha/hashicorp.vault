@@ -90,7 +90,6 @@ kubernetes_token:
   description: The generated Kubernetes token data and lease information.
   type: dict
   returned: always
-  no_log: true
   contains:
     service_account_token:
       description:
@@ -98,7 +97,6 @@ kubernetes_token:
         - This value is sensitive. Always use B(no_log=true) at the task level to
           prevent exposure in Ansible output and logs.
       type: str
-      no_log: true
     service_account_name:
       description: The name of the service account the token was issued for.
       type: str

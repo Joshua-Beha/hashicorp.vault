@@ -36,4 +36,3 @@
     status_code: [200, 204, 400, 404]
     use_proxy: false
   failed_when: false
-

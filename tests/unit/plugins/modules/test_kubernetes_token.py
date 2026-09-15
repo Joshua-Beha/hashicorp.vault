@@ -64,7 +64,7 @@ def test_service_account_token_available_in_registered_result(mock_ansible_modul
 
     main()
 
-    _, kwargs = module.exit_json.call_args
+    args, kwargs = module.exit_json.call_args
     assert kwargs["kubernetes_token"]["service_account_token"] == "supersecrettoken"
 
 
@@ -162,7 +162,7 @@ def test_vault_permission_error_surfaces_as_fail_json(mock_ansible_module, mock_
 
     main()
 
-    _, kwargs = module.fail_json.call_args
+    args, kwargs = module.fail_json.call_args
     assert "Permission denied" in kwargs.get("msg", "")
 
 
@@ -186,5 +186,5 @@ def test_vault_api_error_surfaces_as_fail_json(mock_ansible_module, mock_auth, m
 
     main()
 
-    _, kwargs = module.fail_json.call_args
+    args, kwargs = module.fail_json.call_args
     assert "Vault API error" in kwargs.get("msg", "")

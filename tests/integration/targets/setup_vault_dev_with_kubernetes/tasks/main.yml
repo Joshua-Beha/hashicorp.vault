@@ -262,4 +262,3 @@
 - name: Enable kubernetes fixture for downstream targets
   ansible.builtin.set_fact:
     ansible_test_kubernetes_fixture_enabled: true
-

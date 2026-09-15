@@ -23,4 +23,3 @@ ansible_test_kubernetes_token_max_ttl: "24h"
 # kind clusters require tokens scoped to the Kubernetes API server audience.
 # This must match the --api-audiences flag of the kube-apiserver (default for kind).
 ansible_test_kubernetes_token_audiences: "https://kubernetes.default.svc.cluster.local"
-
