@@ -1,4 +1,15 @@
 ---
+- name: Stop and remove Vault dev server container
+  ansible.builtin.command:
+    argv:
+      - "{{ container_runtime }}"
+      - rm
+      - -f
+      - "{{ ansible_test_vault_container_name }}"
+  register: _vault_cleanup
+  failed_when: false
+  changed_when: _vault_cleanup.rc == 0
+
 - name: Delete kind cluster
   ansible.builtin.command:
     argv:

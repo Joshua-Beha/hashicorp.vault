@@ -1,18 +1,14 @@
 ---
 - name: Run kubernetes_token tests
-  module_defaults:
-    group/hashicorp.vault.vault:
-      url: "{{ vault_url }}"
-      namespace: "{{ vault_namespace }}"
-      auth_method: token
-      token: "{{ vault_token_from_setup_auth_token }}"
-      vault_approle_path: "{{ ansible_test_vault_mount_path }}"
   vars:
     test_kubernetes_mount_path: "{{ ansible_test_kubernetes_mount_path }}"
     test_kubernetes_role_name: "{{ ansible_test_kubernetes_role_name }}"
     test_kubernetes_namespace: "{{ ansible_test_kubernetes_namespace }}"
     test_kubernetes_audience: "{{ ansible_test_kubernetes_audience }}"
     test_kubernetes_ttl: "{{ ansible_test_kubernetes_ttl }}"
+    # Use local Vault dev server that setup_vault_dev_with_kubernetes creates
+    test_vault_url: "{{ ansible_test_vault_url | default('http://127.0.0.1:8200') }}"
+    test_vault_token: "{{ ansible_test_vault_root_token | default('root') }}"
   block:
     - name: Skip integration test when Kubernetes secrets engine test fixture is not configured
       ansible.builtin.debug:
@@ -25,10 +21,9 @@
 
     - name: Generate Kubernetes token using Vault token authentication
       hashicorp.vault.kubernetes_token:
-        url: "{{ vault_url }}"
-        namespace: "{{ vault_namespace }}"
+        url: "{{ test_vault_url }}"
         auth_method: token
-        token: "{{ vault_token_from_setup_auth_token }}"
+        token: "{{ test_vault_token }}"
         kubernetes_mount_path: "{{ test_kubernetes_mount_path }}"
         name: "{{ test_kubernetes_role_name }}"
         kubernetes_namespace: "{{ test_kubernetes_namespace }}"
@@ -73,8 +68,7 @@
 
     - name: Generate Kubernetes token using AppRole authentication
       hashicorp.vault.kubernetes_token:
-        url: "{{ vault_url }}"
-        namespace: "{{ vault_namespace }}"
+        url: "{{ test_vault_url }}"
         auth_method: approle
         role_id: "{{ vault_approle_role_id }}"
         secret_id: "{{ vault_approle_secret_id }}"
